@@ -3,11 +3,16 @@ import classes from './Input.module.css';
 
 const input = (props) => {
   let inputEl = null;
+  const inputClass = [classes.InputElement];
+
+  if (props.invalid && props.shouldValidate && props.touched) {
+    inputClass.push(classes.Invalid);
+  }
 
   switch (props.elementType) {
     case 'input':
       inputEl = <input
-        className={classes.InputElement}
+        className={inputClass.join(' ')}
         {...props.elementConfig}
         value={props.value}
         onChange={props.changed}
@@ -34,7 +39,7 @@ const input = (props) => {
             <option key={option.value} value={option.value}>{option.displayValue}</option>
           ))}
         </select>
-    );
+      );
       break;
 
     default:

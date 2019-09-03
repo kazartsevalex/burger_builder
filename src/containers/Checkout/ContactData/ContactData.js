@@ -14,7 +14,12 @@ class ContactData extends React.Component {
           type: 'text',
           placeholder: 'Your Name'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       street: {
         elementType: 'input',
@@ -22,7 +27,12 @@ class ContactData extends React.Component {
           type: 'text',
           placeholder: 'Street'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       zipCode: {
         elementType: 'input',
@@ -30,7 +40,14 @@ class ContactData extends React.Component {
           type: 'text',
           placeholder: 'Zip Code'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 6
+        },
+        valid: false,
+        touched: false
       },
       country: {
         elementType: 'input',
@@ -38,7 +55,12 @@ class ContactData extends React.Component {
           type: 'text',
           placeholder: 'Country'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       email: {
         elementType: 'input',
@@ -46,7 +68,12 @@ class ContactData extends React.Component {
           type: 'email',
           placeholder: 'Your Email'
         },
-        value: ''
+        value: '',
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       deliveryMethod: {
         elementType: 'select',
@@ -56,20 +83,48 @@ class ContactData extends React.Component {
             { value: 'cheapest', displayValue: 'Cheapest' }
           ]
         },
-        value: ''
+        value: 'cheapest',
+        validation: {},
+        valid: true
       }
     },
+    formIsValid: false,
     loading: false
+  }
+
+  checkValidity(value, rules) {
+    let isValid = true;
+    if (!rules) return true;
+
+    if (rules.required) {
+      isValid = value.trim() !== '' && isValid;
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid;
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid;
+    }
+
+    return isValid;
   }
 
   inputChangedHandler = (e, inputIdentifier) => {
     const updatedOrderForm = { ...this.state.orderForm };
-    const updFromElement = {
-      ...updatedOrderForm[inputIdentifier]
-    };
+    const updFromElement = { ...updatedOrderForm[inputIdentifier] };
     updFromElement.value = e.target.value;
+    updFromElement.touched = true;
+    updFromElement.valid = this.checkValidity(updFromElement.value, updFromElement.validation);
     updatedOrderForm[inputIdentifier] = updFromElement;
-    this.setState({ orderForm: updatedOrderForm });
+
+    let formIsValid = true;
+    for (let id in updatedOrderForm) {
+      formIsValid = updatedOrderForm[id].valid && formIsValid;
+    }
+
+    this.setState({ orderForm: updatedOrderForm, formIsValid: formIsValid });
   }
 
   orderHandler = (e) => {
@@ -106,6 +161,9 @@ class ContactData extends React.Component {
           elementConfig={this.state.orderForm[key].elementConfig}
           value={this.state.orderForm[key].value}
           changed={(e) => this.inputChangedHandler(e, key)}
+          invalid={!this.state.orderForm[key].valid}
+          shouldValidate={this.state.orderForm[key].validation}
+          touched={this.state.orderForm[key].touched}
         />
       );
     }
@@ -113,12 +171,11 @@ class ContactData extends React.Component {
     let form = (
       <form onSubmit={this.orderHandler}>
         {formElements}
-        <Button buttonType="Success">ORDER</Button>
+        <Button buttonType="Success" disabled={!this.state.formIsValid}>ORDER</Button>
       </form>
     );
-    if (this.state.loading) {
-      form = <Spinner />;
-    }
+    if (this.state.loading) form = <Spinner />;
+
     return (
       <div className={classes.ContactData}>
         <h4>Enter your contact data</h4>
