@@ -28,6 +28,7 @@ class App extends React.Component {
       routes = (
         <Layout>
           <Route path='/' exact component={BurgerBuilder} />
+          <Route path='/auth' component={Auth} />
           <Route path='/checkout' component={Checkout} />
           <Route path='/orders' component={Orders} />
           <Route path='/logout' component={Logout} />
