@@ -10,7 +10,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 
-class BurgerBuilder extends React.Component {
+export class BurgerBuilder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
