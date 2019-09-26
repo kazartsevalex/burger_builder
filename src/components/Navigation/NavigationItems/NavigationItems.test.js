@@ -13,12 +13,17 @@ describe('<NavigationItems />', () => {
     wrapper = shallow(<NavigationItems />);
   });
 
-  it('should render 2 <NavigationItem /> elemnts if not logged in', () => {
+  it('should render 2 <NavigationItem /> elements if not logged in', () => {
     expect(wrapper.find(NavigationItem)).toHaveLength(2);
   });
 
-  it('should render 3 <NavigationItem /> elemnts if logged in', () => {
+  it('should render 3 <NavigationItem /> elements if logged in', () => {
     wrapper.setProps({ isAuthenticated: true });
     expect(wrapper.find(NavigationItem)).toHaveLength(3);
+  });
+
+  it('should render Log Out element if logged in', () => {
+    wrapper.setProps({ isAuthenticated: true });
+    expect(wrapper.contains(<NavigationItem link="/logout">Log Out</NavigationItem>)).toEqual(true);
   });
 });
