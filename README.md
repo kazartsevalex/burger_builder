@@ -1,3 +1,15 @@
+# Burger Builder
+SPA made with React and Redux for building your own burgers, allows authorization, checkout, orders storing and tests.
+
+## Backend
+* Firebase DB
+
+## Frontend
+* React + Redux;
+* CSS Modules;
+* Axios;
+* Enzyme + Jest
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
